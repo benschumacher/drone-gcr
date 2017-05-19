@@ -18,8 +18,8 @@ GCR_ACCOUNT=$(jq -r ".client_email" "${TMPFILE}")
 export DOCKER_REGISTRY DOCKER_USERNAME DOCKER_PASSWORD DOCKER_EMAIL
 DOCKER_REGISTRY="${PLUGIN_REGISTRY:-gcr.io}"
 DOCKER_USERNAME="_json_key"
-DOCKER_PASSWORD="${GCR_AUTH_KEY}"
+DOCKER_PASSWORD="$(cat ${TMPFILE})"
 DOCKER_EMAIL="-"
 
 # invoke the docker plugin
-/bin/drone-docker "$@"
+exec /bin/drone-docker "$@"
