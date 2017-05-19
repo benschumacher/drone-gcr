@@ -8,50 +8,26 @@ Drone plugin to build and publish Docker images to Google Container Registry. Fo
 
 ## Docker
 
-Build the container using `make`:
+Build the Docker image with the follow commands:
 
 ```
-make deps docker
+docker build --rm=true -t plugins/gcr .
 ```
 
-### Example
+### Usage
+
+Execute from the working directory:
+
 
 ```sh
-docker run -i --privileged -v $(pwd):/drone/src plugins/drone-gcr <<EOF
-{
-    "repo": {
-        "clone_url": "git://github.com/drone/drone",
-        "owner": "drone",
-        "name": "drone",
-        "full_name": "drone/drone"
-    },
-    "system": {
-        "link_url": "https://beta.drone.io"
-    },
-    "build": {
-        "number": 22,
-        "status": "success",
-        "started_at": 1421029603,
-        "finished_at": 1421029813,
-        "message": "Update the Readme",
-        "author": "johnsmith",
-        "author_email": "john.smith@gmail.com"
-        "event": "push",
-        "branch": "master",
-        "commit": "436b7a6e2abaddfd35740527353e78a227ddcb2c",
-        "ref": "refs/heads/master"
-    },
-    "workspace": {
-        "root": "/drone/src",
-        "path": "/drone/src/github.com/drone/drone"
-    },
-    "vargs": {
-        "username": "kevinbacon",
-        "password": "pa$$word",
-        "email": "foo@bar.com",
-        "repo": "foo/bar",
-        "storage_driver": "aufs"
-    }
-}
-EOF
+docker run --rm \
+  -e PLUGIN_TAG=latest \
+  -e PLUGIN_REPO=octocat/hello-world \
+  -e "GCR_TOKEN=$(cat ~/google-key.json)" \
+  -e GCR_REGISTRY=us.gcr.io \
+  -e DRONE_COMMIT_SHA=d8dbe4d94f15fe89232e0402c6e8a0ddf21af3ab \
+  -v $(pwd):$(pwd) \
+  -w $(pwd) \
+  --privileged \
+  plugins/gcr --dry-run
 ```

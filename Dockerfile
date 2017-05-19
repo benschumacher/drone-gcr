@@ -1,6 +1,6 @@
-# Docker image for the ecr plugin
+# Docker image for the gcr plugin
 #
-#     docker build --rm=true -t plugins/ecr .
+#     docker build --rm=true -t plugins/gcr .
 FROM plugins/docker:17.05
 
 ENV HOME /
