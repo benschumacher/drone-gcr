@@ -1,41 +1,8 @@
-build:
-  image: golang:1.5
-  environment:
-    - CGO_ENABLED=0
-  commands:
-    - make deps
-    - make vet
-    - make build
-    - make test
-
-publish:
-  coverage:
-    when:
-      branch: master
+pipeline:
   docker:
-    username: $$DOCKER_USER
-    password: $$DOCKER_PASS
-    email: $$DOCKER_EMAIL
-    repo: plugins/drone-gcr
-    tag: latest
-    when:
-      branch: master
-  docker:
-    username: $$DOCKER_USER
-    password: $$DOCKER_PASS
-    email: $$DOCKER_EMAIL
-    repo: plugins/drone-gcr
-    tag: develop
-    when:
-      branch: develop
-
-plugin:
-  name: Google Container Registry
-  desc: Build and publish images to Google Container Registry
-  type: publish
-  image: plugins/drone-gcr
-  labels:
-    - docker
-    - image
-    - container
-    - google
+    image: plugins/docker:17.05
+    repo: containers.cisco.com/devnet/drone-gcr
+    registry: containers.cisco.com
+    username: "${DEVNET_ORG_USERNAME}"
+    password: "${DEVNET_ORG_PASSWORD}"
+    tags: [ latest, "17", "17.05" ]
