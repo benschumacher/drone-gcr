@@ -13,7 +13,6 @@ fi
 TMPFILE=$(mktemp)
 echo "${GCR_AUTH_KEY}" | base64 -d > "${TMPFILE}"
 GCR_ACCOUNT=$(jq -r ".client_email" "${TMPFILE}")
-gcloud auth activate-service-account "${GCR_ACCOUNT}" --key-file="${TMPFILE}"
 
 # prepare these values for the drone-docker plugin
 export DOCKER_REGISTRY DOCKER_USERNAME DOCKER_PASSWORD DOCKER_EMAIL
