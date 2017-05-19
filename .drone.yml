@@ -1,8 +1,8 @@
 pipeline:
   docker:
-    image: plugins/docker:1.13
+    image: plugins/docker:17.05
     repo: containers.cisco.com/devnet/drone-gcr
     registry: containers.cisco.com
     username: "${DEVNET_ORG_USERNAME}"
     password: "${DEVNET_ORG_PASSWORD}"
-    tags: [ latest, "1.13" ]
+    tags: [ latest, "17", "17.05" ]

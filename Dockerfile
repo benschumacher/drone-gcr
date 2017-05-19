@@ -1,10 +1,9 @@
 # Docker image for the ecr plugin
 #
 #     docker build --rm=true -t plugins/ecr .
-FROM plugins/docker:1.13
+FROM plugins/docker:17.05
 
 ENV HOME /
-ENV PATH /google-cloud-sdk/bin:$PATH
 
 RUN \
        apk add -Uuv --no-cache ca-certificates jq \

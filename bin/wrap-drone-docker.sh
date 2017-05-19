@@ -1,28 +1,29 @@
 #!/bin/sh
 set -eu
 
+# if debug enabled, then we'll echo commands (note: will leak keys)
 if [ "${PLUGIN_DEBUG:-}" = "true" ]; then
     set -x
 fi
 
-if [ -n "$PLUGIN_AUTH_KEY" ]; then
-    export GCR_AUTH_KEY
-    if (echo "${PLUGIN_AUTH_KEY}" | jq -e '.'); then
-        GCR_AUTH_KEY="${PLUGIN_AUTH_KEY}"
-    else
-        GCR_AUTH_KEY="$(echo "${PLUGIN_AUTH_KEY}" | base64 -d)"
-    fi
+# populate GCR_TOKEN from PLUGIN_TOKEN
+if [ -n "$PLUGIN_TOKEN" ]; then
+    export GCR_TOKEN
+    GCR_TOKEN="${PLUGIN_TOKEN}"
 fi
 
-TMPFILE=$(mktemp)
-echo "${GCR_AUTH_KEY}" > "${TMPFILE}"
-GCR_ACCOUNT=$(jq -r ".client_email" "${TMPFILE}")
+# attempt to detect JSON v. Baste64 encoding
+if (echo "${PLUGIN_TOKEN}" | jq -e '.'); then
+    GCR_TOKEN="${PLUGIN_TOKEN}"
+else
+    GCR_TOKEN="$(echo "${PLUGIN_TOKEN}" | base64 -d)"
+fi
 
 # set variables for using Docker with GCR
 export DOCKER_REGISTRY DOCKER_USERNAME DOCKER_PASSWORD
 DOCKER_REGISTRY="${PLUGIN_REGISTRY:-gcr.io}"
 DOCKER_USERNAME="_json_key"
-DOCKER_PASSWORD="${GCR_AUTH_KEY}"
+DOCKER_PASSWORD="${GCR_TOKEN}"
 
 # invoke the docker plugin
 exec /bin/drone-docker "$@"
