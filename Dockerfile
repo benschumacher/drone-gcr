@@ -7,8 +7,7 @@ ENV HOME /
 ENV PATH /google-cloud-sdk/bin:$PATH
 
 RUN \
-       apk add -Uuv --no-cache \
-           curl bash ca-certificates jq \
+       apk add -Uuv --no-cache ca-certificates jq \
     && rm -rf /var/cache/apk/*
 
 ADD bin/wrap-drone-docker.sh /bin/wrap-drone-docker.sh
