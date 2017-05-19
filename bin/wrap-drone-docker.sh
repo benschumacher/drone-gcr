@@ -19,7 +19,12 @@ export DOCKER_REGISTRY DOCKER_USERNAME DOCKER_PASSWORD DOCKER_EMAIL
 DOCKER_REGISTRY="${PLUGIN_REGISTRY:-gcr.io}"
 DOCKER_USERNAME="_json_key"
 DOCKER_PASSWORD="$(cat ${TMPFILE})"
-DOCKER_EMAIL="-"
+
+# use debug?
+export PLUGIN_DEBUG
+PLUGIN_DEBUG=true
+
+env
 
 # invoke the docker plugin
 exec /bin/drone-docker "$@"
