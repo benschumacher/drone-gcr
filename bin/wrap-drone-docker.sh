@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -eu
 
 if [ "${PLUGIN_DEBUG:-}" = "true" ]; then
@@ -11,7 +11,7 @@ fi
 
 #TMPFILE="$(mktemp -d)/keyfile.json"
 TMPFILE=$(mktemp)
-echo "${GCR_AUTH_KEY}" > "${TMPFILE}"
+echo "${GCR_AUTH_KEY}" | base64 -d > "${TMPFILE}"
 GCR_ACCOUNT=$(jq -r ".client_email" "${TMPFILE}")
 gcloud auth activate-service-account "${GCR_ACCOUNT}" --key-file="${TMPFILE}"
 
